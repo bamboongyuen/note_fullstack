@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { path } from '../config/path';
 
 export default function Header() {
+    let isLogin = false;
     const handleLogout = () => {};
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
