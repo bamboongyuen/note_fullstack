@@ -1,8 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-
 import { path } from './config/path';
-import store from './store';
 
 import Page from './component/Page';
 import Login from './component/Login';
@@ -19,27 +15,5 @@ export default function Todo() {
         { id: 4, page: Register, path: path.register, layout: MainLayout },
         { id: 5, page: UserManager, path: path.usermanager, layout: MainLayout },
     ];
-    return (
-        <Provider store={store}>
-            <BrowserRouter>
-                <Routes>
-                    {routes.map((route) => {
-                        const Page = route.page;
-                        const Layout = route.layout;
-                        return (
-                            <Route
-                                key={route.id}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
-                </Routes>
-            </BrowserRouter>
-        </Provider>
-    );
+    return <></>;
 }

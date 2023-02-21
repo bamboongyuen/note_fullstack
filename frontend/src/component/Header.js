@@ -1,22 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { logout } from '../store/authSlice';
-import { clear } from '../store/noteSlice';
 import { path } from '../config/path';
-import useFetchData from '../hook/useFetchData';
 
 export default function Header() {
-    const dispatch = useDispatch();
-    const fetchData = useFetchData();
-
-    const { profile, isLogin } = useSelector((state) => state.auth);
-
-    const handleLogout = () => {
-        dispatch(logout());
-        dispatch(clear());
-        fetchData('auth/logout/' + profile._id, 'POST', {}, profile.token);
-    };
+    const handleLogout = () => {};
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid ">

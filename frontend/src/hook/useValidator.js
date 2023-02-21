@@ -23,30 +23,5 @@ export default function useValidator() {
         },
     };
 
-    return (input = []) => {
-        if (!Array.isArray(input)) {
-            input = [input];
-        }
-        let result = true;
-        const notify = input.map((value) => {
-            // [ {require: username, 'min:5': username, 'length:2-5': user} ,]
-            let msg = null;
-            for (let key in value) {
-                let conditor = key;
-                let validator = VALIDATE[key];
-                if (key.includes(':')) {
-                    const splitKey = key.split(':');
-                    conditor = splitKey[0];
-                    validator = VALIDATE[conditor](splitKey[1]);
-                }
-                msg = validator(value[key]);
-                if (msg) {
-                    result = false;
-                    break;
-                }
-            }
-            return msg;
-        });
-        return { result, notify };
-    };
+    return (input = []) => {};
 }

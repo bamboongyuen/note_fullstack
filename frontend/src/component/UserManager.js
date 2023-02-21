@@ -1,37 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import useFetchData from '../hook/useFetchData';
-
 export default function UserManager() {
-    const fetchData = useFetchData();
-    const profile = useSelector((state) => state.auth.profile);
+    let list = [];
 
-    const [list, setList] = useState([]);
-
-    const handleSearch = async () => {
-        if (profile?.token) {
-            const qr = `user/search`;
-            const res = await fetchData(qr, 'GET', {}, profile.token);
-
-            if (res.status) {
-                setList(res.data);
-            } else alert(res.data);
-        }
-    };
-    const handleDelete = async (id) => {
-        if (profile?.token) {
-            const qr = `user/delete/${id}`;
-            const res = await fetchData(qr, 'DELETE', {}, profile.token);
-
-            if (res.status) {
-                setList((priv) => [...priv].filter((user) => user._id !== id));
-            } else alert(res.data);
-        }
-    };
-
-    useEffect(() => {
-        handleSearch();
-    }, []);
     return (
         <div className="mt-4">
             <div>
@@ -55,11 +24,7 @@ export default function UserManager() {
                                     {item.createdAt?.toString().split('.')[0].replace('T', ' ')}
                                 </td>
                                 <td>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleDelete(item._id)}
-                                        className="btn btn-sm btn-danger"
-                                    >
+                                    <button type="button" className="btn btn-sm btn-danger">
                                         Delete
                                     </button>
                                 </td>

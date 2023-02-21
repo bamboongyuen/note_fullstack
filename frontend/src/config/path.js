@@ -5,4 +5,4 @@ export const path = {
     register: '/register',
     usermanager: '/usermanager',
 };
-export const api = 'http://localhost:8080/api/';
+export const api = 'http://192.168.101.139:8080/api/';
