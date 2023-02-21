@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const router = require('../route');
+
 const app = express();
 
 app.use(cors());
@@ -16,6 +18,8 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
     if (err) console.log(err);
     else console.log('db connected.');
 });
+
+router(app);
 
 app.listen(8080, () => {
     console.log('started...');
