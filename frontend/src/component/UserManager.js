@@ -10,13 +10,13 @@ export default function UserManager() {
     const handSearch = async () => {
         const fetLink = qr ? `/user/search?q=${qr}` : '/user/search';
         setQr('');
-        const res = await fetchData(fetLink, {}, 'GET', 'token');
+        const res = await fetchData(fetLink, {}, 'GET', true);
         if (res.result) setList(res.data);
         else alert(res.data);
     };
     const handDelete = async (id) => {
         //
-        const res = await fetchData('/user/delete/' + id, {}, 'DELETE', 'token');
+        const res = await fetchData('/user/delete/' + id, {}, 'DELETE', true);
         if (res.result) {
             handSearch();
         }
