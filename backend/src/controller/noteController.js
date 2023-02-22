@@ -4,7 +4,7 @@ const response = require('../help/response');
 module.exports = {
     // [POST] /api/notes
     create: (req, res) => {
-        if (!req.body.title || !req.body.userId)
+        if (!req.body.title || req.body.userId !== req._id)
             return res.status(400).json(response(false, 'Request miss params'));
         new Note(req.body)
             .save()
@@ -18,6 +18,9 @@ module.exports = {
     // [GET] /api/notes?q=xx
     search: (req, res) => {
         const qr = req.query.q ? { title: { $regex: req.query.q } } : {};
+        if (req.role !== 'admin') {
+            qr.userId = req._id;
+        }
         Note.find(qr)
             .then((doc) => {
                 return res.status(201).json(response(true, doc));
@@ -30,6 +33,8 @@ module.exports = {
     update: (req, res) => {
         if (!req.params.id || !req.body.title)
             return res.status(404).json(response(false, 'Request miss params'));
+        if (req.params.id !== req._id)
+            return res.status(403).json(response(false, 'Request out of role'));
         Note.findByIdAndUpdate(req.params.id, req.body)
             .then((doc) => {
                 if (doc) return res.status(200).json(response(true, 'OK. update'));

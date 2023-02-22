@@ -1,9 +1,17 @@
-export default function Page() {
-    let profile,
-        content,
-        title,
-        listNote = [];
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import useFetchData from '../hook/useFetchData';
 
+export default function Page() {
+    const fetchData = useFetchData();
+
+    const profile = useSelector((state) => state.auth.profile);
+    const [active, setActive] = useState(null);
+    const [list, setList] = useState([]);
+
+    const content = list.filter((note) => note._id === active)[0]?.content;
+
+    const handleSearch = () => {};
     return (
         <div className="d-flex mt-3">
             <div className="col-4 ">
@@ -30,7 +38,7 @@ export default function Page() {
                         </ul>
                     </div>
                     <div className="list-group mt-4">
-                        {listNote.map((item) => {
+                        {list.map((item) => {
                             const clName =
                                 'list-group-item list-group-item-action ' +
                                 (item._id === active ? 'active' : '');
@@ -41,11 +49,7 @@ export default function Page() {
                                 <div key={item._id} className={clName}>
                                     <div className="d-flex w-100 justify-content-between">
                                         {item._id === active ? (
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                value={title || ''}
-                                            />
+                                            <input type="text" className="form-control" />
                                         ) : (
                                             <h5 className="mb-1">{item.title || ''}</h5>
                                         )}
