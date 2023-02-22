@@ -7,8 +7,9 @@ module.exports = function (type) {
             user = true;
             pass = true;
             break;
-        default:
+        case 'token':
             token = true;
+            break;
     }
     return (req, res, next) => {
         if (user && !req.body.username) {

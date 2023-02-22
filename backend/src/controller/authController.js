@@ -1,7 +1,7 @@
-const User = require('../model/userModel');
 const bcrypt = require('bcrypt');
+const User = require('../model/userModel');
 const response = require('../help/response');
-const { createToken } = require('../help/token');
+const { createToken, decodeToken } = require('../help/token');
 
 let arr = [];
 
@@ -19,20 +19,21 @@ module.exports = {
                             .status(400)
                             .json(response(false, 'Wrong username and password.'));
                     }
-                    const accessToken = createToken({ _id: doc._id, role: doc.role }, true);
-                    const refreshToken = createToken({ _id: doc._id, role: doc.role });
+                    const payload = { _id: doc._id, role: doc.role };
+                    const accessToken = createToken(payload, true);
+                    const refreshToken = createToken(payload);
                     arr.push(refreshToken);
-                    res.cookie('token', 'Bearer ' + accessToken, {
+                    res.cookie('token', 'Bearer ' + refreshToken, {
                         httpOnly: true,
                         secure: false,
                         sameSite: 'strict',
                     });
-                    const data = { ...doc.toObject(), token: 'Bearer ' + refreshToken };
-                    res.status(200).json(response(true, data));
+                    const data = { ...doc.toObject(), token: 'Bearer ' + accessToken };
+                    return res.status(200).json(response(true, data));
                 });
             })
             .catch((err) => {
-                return res.status(400).json(response(false, 'DB error'));
+                return res.status(500).json(response(false, 'DB error'));
             });
     },
     signup: (req, res) => {
@@ -53,11 +54,30 @@ module.exports = {
     },
     refresh: (req, res) => {
         //
+        const token = req.cookies.token?.split(' ')[1];
+        const decode = decodeToken(token);
+        if (!decode) {
+            return res.status(400).json(response(false, 'Request no authentication.'));
+        }
+        arr = arr.filter((tk) => tk !== token);
+        const payload = { _id: decode?._id, role: decode?.role };
+        const accessToken = createToken(payload, true);
+        const refreshToken = createToken(payload);
+        arr.push(refreshToken);
+
+        res.cookie('token', 'Bearer ' + refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+        });
+        const data = { ...payload, token: 'Bearer ' + accessToken };
+        return res.status(200).json(response(true, data));
     },
     logout: (req, res) => {
         //
+        const token = req.cookies.token?.split(' ')[1];
+        arr = arr.filter((tk) => tk !== token);
         res.clearCookie('token');
-        arr = arr.filter((tk) => tk !== req.headers.token);
         res.status(200).json(response(true, 'logout.'));
     },
 };
