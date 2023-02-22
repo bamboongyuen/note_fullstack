@@ -6,6 +6,7 @@ module.exports = function (req, res, next) {
     jwt.verify(token, process.env.ACCESS_JWT, (err, decode) => {
         if (err) return res.status(401).json(response(false, 'Request no authentication'));
         req.role = decode.role;
+        req._id = decode._id;
         next();
     });
 };
