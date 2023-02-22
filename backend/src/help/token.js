@@ -4,7 +4,7 @@ function createToken(data, accessToken) {
     if (accessToken) {
         return jwt.sign(data, process.env.ACCESS_JWT, { expiresIn: 90 });
     } else {
-        return jwt.sign(data, process.env.REFRESH_JWT, { expiresIn: '1d' });
+        return jwt.sign(data, process.env.REFRESH_JWT, { expiresIn: '2h' });
     }
 }
 

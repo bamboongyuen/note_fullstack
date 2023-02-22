@@ -1,6 +1,27 @@
-export default function UserManager() {
-    let list = [];
+import { useEffect, useState } from 'react';
+import useFetchData from '../hook/useFetchData';
 
+export default function UserManager() {
+    const [list, setList] = useState([]);
+    const fetchData = useFetchData();
+
+    const handSearch = async () => {
+        const res = await fetchData('/user/search', {}, 'GET', 'token');
+        if (res.result) setList(res.data);
+        else alert(res.data);
+    };
+    const handDelete = async (id) => {
+        //
+        const res = await fetchData('/user/delete/' + id, {}, 'DELETE', 'token');
+        if (res.result) {
+            handSearch();
+        }
+        alert(res.data);
+    };
+
+    useEffect(() => {
+        handSearch();
+    }, []);
     return (
         <div className="mt-4">
             <div>
@@ -24,7 +45,11 @@ export default function UserManager() {
                                     {item.createdAt?.toString().split('.')[0].replace('T', ' ')}
                                 </td>
                                 <td>
-                                    <button type="button" className="btn btn-sm btn-danger">
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() => handDelete(item._id)}
+                                    >
                                         Delete
                                     </button>
                                 </td>

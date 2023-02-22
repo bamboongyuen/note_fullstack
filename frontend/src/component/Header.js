@@ -1,14 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/authSlice';
 import { path } from '../config/path';
 
 export default function Header() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const profile = useSelector((state) => state.auth.profile);
 
     const handleLogout = () => {
         dispatch(logout());
+        navigate(path.login);
     };
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
