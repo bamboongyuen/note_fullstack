@@ -1,3 +1,5 @@
+const authRoute = require('./authRoute');
+
 module.exports = function (app) {
-    app.use('/', (req, res) => res.json('ok'));
+    app.use('/api/auth', authRoute);
 };
