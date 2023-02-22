@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
+import { Provider } from 'react-redux';
+import store from './store';
 import { path } from './config/path';
 
 import Page from './component/Page';
@@ -18,24 +19,26 @@ export default function Todo() {
         { id: 5, page: UserManager, path: path.usermanager, layout: MainLayout },
     ];
     return (
-        <BrowserRouter>
-            <Routes>
-                {routes.map((route) => {
-                    let Page = route.page;
-                    let Layout = route.layout;
-                    return (
-                        <Route
-                            key={route.id}
-                            path={route.path}
-                            element={
-                                <Layout>
-                                    <Page />
-                                </Layout>
-                            }
-                        />
-                    );
-                })}
-            </Routes>
-        </BrowserRouter>
+        <Provider store={store}>
+            <BrowserRouter>
+                <Routes>
+                    {routes.map((route) => {
+                        let Page = route.page;
+                        let Layout = route.layout;
+                        return (
+                            <Route
+                                key={route.id}
+                                path={route.path}
+                                element={
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                }
+                            />
+                        );
+                    })}
+                </Routes>
+            </BrowserRouter>
+        </Provider>
     );
 }

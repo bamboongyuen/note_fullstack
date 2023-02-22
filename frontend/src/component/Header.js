@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice';
 import { path } from '../config/path';
 
 export default function Header() {
-    let isLogin = false;
-    const handleLogout = () => {};
+    const dispatch = useDispatch();
+    const profile = useSelector((state) => state.auth.profile);
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid ">
@@ -40,10 +46,10 @@ export default function Header() {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                {isLogin ? profile?.username : 'Guest'}
+                                {profile?._id ? profile?.username : 'Guest'}
                             </div>
                             <ul className="dropdown-menu">
-                                {!isLogin ? (
+                                {!profile?._id ? (
                                     <>
                                         <Link className="dropdown-item" to={path.register}>
                                             Register
