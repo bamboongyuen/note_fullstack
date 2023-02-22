@@ -23,5 +23,26 @@ export default function useValidator() {
         },
     };
 
-    return (input = []) => {};
+    return (input = []) => {
+        const flag = Array.isArray(input);
+        if (!flag) input = [input];
+        let result = true;
+        const msg = input.map((item) => {
+            let res;
+            for (let key in item) {
+                let validator = VALIDATE[key];
+                if (key.includes(':')) {
+                    let splitKey = key.split(':');
+                    validator = VALIDATE[splitKey[0]](splitKey[1]);
+                }
+                res = validator(item[key]);
+                if (res) {
+                    result = false;
+                    break;
+                }
+            }
+            return res;
+        });
+        return flag ? { result, msg } : { result, msg: msg[0] };
+    };
 }
